@@ -3,4 +3,7 @@ project(miniconf C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(miniconf main.c)
+add_executable(miniconf test.c
+        miniconf.h
+        filelib.h
+        memlib.h)

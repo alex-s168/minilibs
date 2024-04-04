@@ -1,0 +1,11 @@
+status bar:
+    visible: true
+    scale: 0.4
+    background: xFFFFFFFF
+    normal:
+        format: "{lang}  {line}/{col}
+    input:
+        has hint:
+            format: "{hint}: {message}
+        has not hint:
+            format: "{message}
