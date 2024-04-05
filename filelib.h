@@ -63,4 +63,35 @@ char *readLine(FILE *file)
 }
 #endif
 
+char *readFile(FILE *file)
+#ifndef FILELIB_IMPL
+;
+#else
+{
+    char *out = malloc(1);
+    size_t out_size = 0;
+
+    char *line;
+    while ((line = readLine(file)) != NULL) {
+        const size_t len = strlen(line);
+        char *newbuf = realloc(out, out_size + len + (out_size > 0 ? 2 : 1));
+        if (newbuf == NULL) {
+            free(out);
+            free(line);
+            return NULL;
+        }
+        out = newbuf;
+        if (out_size > 0)
+            out[out_size ++] = '\n';
+        memcpy(out + out_size, line, len);
+        out_size += len;
+
+        free(line);
+    }
+
+    out[out_size] = '\0';
+    return out;
+}
+#endif
+
 #endif //FILELIB_H
