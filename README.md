@@ -1,7 +1,10 @@
 # minifmt
-Simple, header-only, platform-independent, string-formatting and templating library for C
+Simple, header-only, platform-independent, string-formatting and templating library for C.
 
-## Examlple
+## Dependencies
+- stdlib.h: malloc, free, realloc
+
+## Example
 ```c++
 static const char *fmt_str = "Test {row} str {col.h}";
 
@@ -26,3 +29,7 @@ int main(void) {
     return 0;
 }
 ```
+
+## Additional features
+- `ll_to_ascii`
+- `d_to_ascii`

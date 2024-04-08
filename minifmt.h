@@ -16,6 +16,69 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 #include <stddef.h>
 #include <stdlib.h>
 
+static void rev(char *first, char *last) {
+    if (first > last) {
+        char *temp = last;
+        last = first;
+        first = temp;
+    }
+    
+    while (last >= first) {
+        const char s = *first;
+        *first++ = *last;
+        *last-- = s;
+    }
+}
+
+/** converts value to ascii into dest; returns position of null terminator; */
+char *ll_to_ascii(long long value, char *dest, const int radix)
+#ifndef MINIFMT_IMPL
+;
+#else
+{
+    if (value < 0) {
+        *dest++ = '-';
+        value = -value;
+    } else if (value == 0) {
+        *dest++ = '0';
+        *dest = '\0';
+        return dest;
+    }
+
+    char *start = dest;
+
+    while (value) {
+        const int i = value % radix;
+        value /= radix;
+        if (i < 10)
+            *dest++ = i + '0';
+        else
+            *dest++ = i + 'a' - 10;
+    }
+
+    rev(start, dest-1);
+    
+    *dest = '\0';
+    // we return pos of nt so we don't increment here
+    
+    return dest;
+}
+#endif
+
+/** converts value to ascii into dest; returns position of null terminator */
+char *d_to_ascii(const double value, char *dest)
+#ifndef MINIFMT_IMPL
+;
+#else
+{
+    const long long valueL = (long long) value;
+    dest = ll_to_ascii(valueL, dest, 10);
+    *dest++ = '.';
+    dest = ll_to_ascii((long long) (value - (double) valueL), dest, 10);
+    return dest;
+}
+#endif
+
 typedef struct {
     const char *str;
     size_t      len;
@@ -206,24 +269,24 @@ const char *placeholder_placeholder_find(FmtPlaceholderElem elem, void *listPtr)
 
         switch (p->type) {
             case PlaceholderType_LONG: {
-                static char buf[200];
-                const char *fmt = "%ld";
+                int base = 10;
                 if (elem.flag != NULL) {
                     if (strchr(elem.flag, 'h') != NULL) {
-                        fmt = "%lx";
+                        base = 16;
                     } else if (strchr(elem.flag, 'b') != NULL) {
-                        fmt = "%lb";
+                        base = 2;
                     } else if (strchr(elem.flag, 'o') != NULL) {
-                        fmt = "%lo";
+                        base = 8;
                     }
                 }
-                sprintf(buf, fmt, p->l);
+                static char buf[200];
+                ll_to_ascii(p->l, buf, base);
                 return buf;
             }
 
             case PlaceholderType_DOUBLE: {
                 static char buf[200];
-                sprintf(buf, "%f", p->d);
+                d_to_ascii(p->d, buf);
                 return buf;
             }
 
