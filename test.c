@@ -16,7 +16,7 @@ int main(void) {
         .elems = (Placeholder[]) {
             PLACEHOLDER_LONG("col", 26),
             PLACEHOLDER_LONG("row", 2),
-            PLACEHOLDER_DOUBLE("test", 1.32)
+            PLACEHOLDER_DOUBLE("test", 1.32122)
         },
         .elems_size = 3
     });

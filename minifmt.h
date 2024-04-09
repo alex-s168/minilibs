@@ -12,6 +12,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 #ifndef MINIFMT_H
 #define MINIFMT_H
+#include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -66,7 +67,7 @@ char *ll_to_ascii(long long value, char *dest, const int radix)
 #endif
 
 /** converts value to ascii into dest; returns position of null terminator */
-char *d_to_ascii(const double value, char *dest)
+char *d_to_ascii(const double value, char *dest, const size_t accuraccy)
 #ifndef MINIFMT_IMPL
 ;
 #else
@@ -74,7 +75,27 @@ char *d_to_ascii(const double value, char *dest)
     const long long valueL = (long long) value;
     dest = ll_to_ascii(valueL, dest, 10);
     *dest++ = '.';
-    dest = ll_to_ascii((long long) (value - (double) valueL), dest, 10);
+    
+    static char fltbuf[200];
+    const char *end = ll_to_ascii((long long) ((value - (double) valueL) * pow(10, accuraccy)), fltbuf, 10);
+    
+    size_t len = end - fltbuf;
+
+    for (size_t i = len; i < accuraccy; i ++)
+        *dest++ ='0';
+
+    while (end > fltbuf) {
+        if (!(*end == '0' || *end == '\0'))
+            break;
+        end --;
+    }
+
+    len = end - fltbuf + 1;
+    
+    memcpy(dest, fltbuf, len);
+    dest += len;
+    
+    *dest ='\0';
     return dest;
 }
 #endif
@@ -286,7 +307,7 @@ const char *placeholder_placeholder_find(FmtPlaceholderElem elem, void *listPtr)
 
             case PlaceholderType_DOUBLE: {
                 static char buf[200];
-                d_to_ascii(p->d, buf);
+                d_to_ascii(p->d, buf, 10);
                 return buf;
             }
 

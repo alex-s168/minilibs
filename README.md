@@ -3,6 +3,7 @@ Simple, header-only, platform-independent, string-formatting and templating libr
 
 ## Dependencies
 - stdlib.h: malloc, free, realloc
+- math.h: pow
 
 ## Example
 ```c++
