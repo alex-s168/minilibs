@@ -9,3 +9,5 @@ add_executable(minilibs test.c
         memlib.h
         minifmt.h
         minitab.h)
+
+target_link_libraries(minilibs m)
