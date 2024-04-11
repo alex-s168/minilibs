@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.28)
-project(miniconf C)
+project(minilibs C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(miniconf test.c
+add_executable(minilibs test.c
         miniconf.h
         filelib.h
-        memlib.h)
+        memlib.h
+        minifmt.h
+        minitab.h)
