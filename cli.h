@@ -27,10 +27,10 @@ Flag getFlag(const int argc, char **argv, const char *flag)
 ;
 #else
 {
-    for (size_t i = 1; i < argc; i ++) {
+    for (size_t i = 1; i < (size_t) argc; i ++) {
         if (strcmp(argv[i], flag) == 0) {
             size_t len = 1;
-            for (size_t j = i + 1; j < argc; j ++) {
+            for (size_t j = i + 1; j < (size_t) argc; j ++) {
                 if (argv[j][0] == '-')
                     break;
                 len ++;

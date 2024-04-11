@@ -8,6 +8,7 @@ add_executable(minilibs test.c
         filelib.h
         memlib.h
         minifmt.h
-        minitab.h)
+        minitab.h
+        cli.h)
 
 target_link_libraries(minilibs m)
