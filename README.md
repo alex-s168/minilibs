@@ -1,9 +1,36 @@
 # minilibs
 A set of simple header-only libraries for C.
 
+## minitab
+Simple string table printing library for C.
+
+### Example
+```c++
+int main() {
+    Table table;
+    table.cols = 3;
+    table.rows = 3;
+    table_create(&table);
+
+    table_color_col(table, ANSI_COLOR_RED, 0);
+
+    table.colsExtraPad[1] = 2;
+    table.colsPadLeft[1] = true;
+
+    table_cell(table, 0, 0).text = "Test";
+
+    table_put_fmt(table, 1, 0, "Test %i", 1);
+    table_cell(table, 1, 0).color = ANSI_COLOR_GREEN;
+
+    table_print(table, stdout);
+    table_delete(&table);
+}
+```
+
 ## miniconf
-## Example
-C code:
+Simple configuration file parser for C.
+
+### Example
 ```c++
 int main() {
     Config cfg;
@@ -42,11 +69,13 @@ status bar:
 =======
 
 ## minifmt
-## Dependencies
+Simple string templating library for C.
+
+### Dependencies
 - stdlib.h: malloc, free, realloc
 - math.h: pow
 
-## Example
+### Example
 ```c++
 static const char *fmt_str = "Test {row} str {col.h}";
 
@@ -72,6 +101,6 @@ int main(void) {
 }
 ```
 
-## Additional features
+### Additional features
 - `ll_to_ascii`
 - `d_to_ascii`
