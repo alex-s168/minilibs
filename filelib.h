@@ -22,6 +22,9 @@ char *readLine(FILE *file)
 ;
 #else
 {
+    if (file == NULL)
+        return NULL;
+    
     size_t buf_size = 0;
     size_t buf_cap = 200;
     char *buf = malloc(buf_cap);
@@ -91,6 +94,32 @@ char *readFile(FILE *file)
 
     out[out_size] = '\0';
     return out;
+}
+#endif
+
+void copyFile(FILE *dest, FILE *src)
+#ifndef FILELIB_IMPL
+;
+#else
+{
+    int c;
+    while ((c = fgetc(src)) != EOF)
+        fputc(c, dest);
+}
+#endif
+
+void copyNFile(FILE *dest, FILE *src, size_t count)
+#ifndef FILELIB_IMPL
+;
+#else
+{
+    if (count == 0)
+        return;
+    
+    char *buf = malloc(count);
+    const size_t actual = fread(buf, 1, count, src);
+    fwrite(buf, 1, actual, dest);
+    free(buf);
 }
 #endif
 

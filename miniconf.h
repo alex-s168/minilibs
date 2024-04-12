@@ -263,7 +263,7 @@ long config_get_long(const Config cfg, bool *ok)
         val ++;
     }
 
-    const char *end;
+    char *end;
     const long value = strtol(val, &end, base);
     *ok = (*end == '\0');
     return value;
@@ -292,7 +292,7 @@ double config_get_double(const Config cfg, bool *ok)
         return 0.0;
     }
 
-    const char *end;
+    char *end;
     const double value = strtod(val, &end);
     *ok = (*end == '\0');
     return value;

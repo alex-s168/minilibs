@@ -4,6 +4,8 @@
 #include "miniconf.h"
 #define MINIFMT_IMPL
 #include "minifmt.h"
+#define MINIPROC_IMPL
+#include "miniproc.h"
 
 #include <stdio.h>
 #include <string.h>

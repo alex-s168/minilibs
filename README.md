@@ -1,5 +1,23 @@
 # minilibs
-A set of simple header-only libraries for C.
+A set of simple, multiplatform, header-only libraries for C.
+
+## miniproc
+Simple child process pipe IO library for C.
+
+### Example
+```c++
+ChildProc proc = cpopen("/bin/echo", (const char *[]) { "Hi", NULL });
+if (proc.from == NULL) {
+    fprintf(stderr, "error: %i\n", errno);
+    return 1;
+}
+
+while (cpalive(proc)) {
+    copyNFile(stdout, proc.from, cpcountnext(proc));
+}
+copyNFile(stdout, proc.from, cpcountnext(proc));
+cpclose(proc);
+```
 
 ## minitab
 Simple string table printing library for C.
