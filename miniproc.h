@@ -139,7 +139,6 @@ ChildProc cpopen(const char *file, const char **args)
 {
     int inpipefd[2];
     int outpipefd[2];
-    int status;
 
     ChildProc proc;
     
@@ -147,7 +146,7 @@ ChildProc cpopen(const char *file, const char **args)
     pipe(outpipefd);
     proc.impl__pid = fork();
     
-    if (proc.impl__pidb == 0) {
+    if (proc.impl__pid == 0) {
         // Child process
         dup2(outpipefd[0], STDIN_FILENO);
         dup2(inpipefd[1], STDOUT_FILENO);
@@ -156,7 +155,7 @@ ChildProc cpopen(const char *file, const char **args)
         close(outpipefd[1]);
         close(inpipefd[0]);
         
-        execvp(file, args);
+        execvp(file, (char *const*) args);
         exit(1);
     }
     
@@ -292,6 +291,7 @@ char *cpreadavail(ChildProc *proc)
     const size_t counted = cpcountnext(proc);
     char *buf = malloc(counted + 1);
     const size_t actual = fread(buf, 1, counted, proc->from);
+    (void) actual;
     buf[counted] = '\0';
 
     return buf;

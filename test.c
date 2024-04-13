@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static int miniconf() {
+static int miniconf(void) {
     Config cfg;
     config_init(&cfg);
 
@@ -52,7 +52,7 @@ static int minifmt(void) {
     return 0;
 }
 
-int main() {
+int main(void) {
     miniconf();
     minifmt();
     return 0;
