@@ -12,6 +12,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 #include <stddef.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct {
     char **str;
