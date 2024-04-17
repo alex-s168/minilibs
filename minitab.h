@@ -14,9 +14,13 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 #define MINITAB_H
 
 #include <stddef.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#ifdef MINITAB_IMPL
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#endif
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -65,7 +69,7 @@ void table_create(Table *table)
 }
 #endif
 
-#define table_cell(table, x, y) table.cells[table.cols * y + x]
+#define table_cell(table, x, y) table.cells[(table).cols * (y) + (x)]
 #define table_put_fmt(table, x, y, fmt, ...) { \
     TableCell *cell = &table_cell(table, x, y); \
     char *buf = malloc(256); \
@@ -158,6 +162,23 @@ void table_color_col(const Table table, const char *color, size_t col)
 {
     for (size_t row = 0; row < table.rows; row ++) {
         table_cell(table, col, row).color = color;
+    }
+}
+#endif
+
+void table_append_row(Table *table)
+#ifndef MINITAB_IMPL
+;
+#else
+{
+    table->rows ++;
+    table->cells = realloc(table->cells, sizeof(TableCell) * table->rows * table->cols);
+    assert(table->cells != NULL);
+    for (size_t i = 0; i < table->cols; i ++) {
+        const size_t index = (table->rows - 1) * table->cols + i;
+        table->cells[index].color = NULL;
+        table->cells[index].text = NULL;
+        table->cells[index].toFree = NULL;
     }
 }
 #endif
