@@ -165,7 +165,10 @@ ChildProc cpopen(const char *file, const char **args)
 
     proc.to = fdopen(outpipefd[1], "w");
     proc.from = fdopen(inpipefd[0], "r");
-    
+
+    setbuf(proc.from, NULL);
+    setbuf(proc.to, NULL);
+
     proc.impl__lastReadBuf = NULL;
     
     return proc;
@@ -291,8 +294,8 @@ char *cpreadavail(ChildProc *proc)
     const size_t counted = cpcountnext(proc);
     char *buf = malloc(counted + 1);
     const size_t actual = fread(buf, 1, counted, proc->from);
-    (void) actual;
-    buf[counted] = '\0';
+
+    buf[actual] = '\0';
 
     return buf;
 }
