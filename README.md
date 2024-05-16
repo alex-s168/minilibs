@@ -1,3 +1,5 @@
+# MERGED INTO [allib](https://github.com/alex-s168/allib)
+
 # minilibs
 A set of simple, multiplatform, header-only libraries for C.
 
